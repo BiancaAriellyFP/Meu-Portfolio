@@ -1,5 +1,4 @@
-// src/sections/Hero.tsx
-import React from 'react'
+
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
 import { FiMail, FiDownload } from 'react-icons/fi'
 import astronauta from "../assets/images/astronauta.svg";
