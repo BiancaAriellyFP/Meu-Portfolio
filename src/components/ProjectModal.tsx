@@ -16,16 +16,14 @@ export default function ProjectModal({
   images,
 }: Props) {
   const [index, setIndex] = useState(0);
-  const [fullscreenIndex, setFullscreenIndex] = useState<number | null>(null);
+  const [fullscreen, setFullscreen] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
-      setIndex(0);
     } else {
       document.body.style.overflow = "auto";
       document.body.classList.remove("fullscreen-open");
-      setFullscreenIndex(null);
     }
   }, [isOpen]);
 
@@ -33,131 +31,79 @@ export default function ProjectModal({
 
   return (
     <>
-      {/* MODAL DO PROJETO */}
+      {/* MODAL */}
       <div className="fixed inset-0 z-50 flex items-center justify-center">
-        {/* BACKDROP */}
         <div
           onClick={onClose}
-          className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+          className="absolute inset-0 bg-black/80"
         />
 
-        {/* CONTEÚDO */}
-        <div className="relative z-50 w-full max-w-4xl bg-[#1b102b] rounded-2xl p-8">
-          {/* FECHAR */}
+        <div className="relative z-50 w-[95%] max-w-4xl bg-[#1b102b] rounded-2xl p-6 max-h-[90vh] overflow-y-auto">
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white text-2xl hover:text-purple-400"
+            className="absolute top-4 right-4 text-white text-2xl"
           >
             ✕
           </button>
 
-          {/* CARROSSEL */}
-          <div className="relative w-full h-[420px] overflow-hidden rounded-xl">
+          <div
+            className="relative w-full h-[360px] overflow-hidden rounded-xl cursor-zoom-in"
+            onClick={() => {
+              document.body.classList.add("fullscreen-open");
+              setFullscreen(true);
+            }}
+          >
             <div
-              className="flex transition-transform duration-700 ease-in-out"
+              className="flex transition-transform duration-500"
               style={{ transform: `translateX(-${index * 100}%)` }}
             >
               {images.map((img, i) => (
                 <img
                   key={i}
                   src={img}
-                  alt={title}
-                  onClick={() => {
-                    document.body.classList.add("fullscreen-open");
-                    setFullscreenIndex(i);
-                  }}
-                  className="w-full h-[420px] object-contain flex-shrink-0 cursor-zoom-in"
+                  className="w-full h-[360px] object-contain flex-shrink-0"
                 />
               ))}
             </div>
-
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={() =>
-                    setIndex((index - 1 + images.length) % images.length)
-                  }
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/60 w-10 h-10 rounded-full text-white hover:bg-black/80"
-                >
-                  ‹
-                </button>
-
-                <button
-                  onClick={() =>
-                    setIndex((index + 1) % images.length)
-                  }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/60 w-10 h-10 rounded-full text-white hover:bg-black/80"
-                >
-                  ›
-                </button>
-              </>
-            )}
           </div>
 
-          {/* TEXTO */}
-          <div className="mt-6">
-            <h3 className="text-2xl font-bold text-white">
-              {title}
-            </h3>
-            <p className="text-gray-300 mt-3 leading-relaxed">
-              {description}
-            </p>
-          </div>
+          {images.length > 1 && (
+            <div className="flex justify-between mt-4">
+              <button
+                onClick={() =>
+                  setIndex((index - 1 + images.length) % images.length)
+                }
+              >
+                ◀
+              </button>
+              <button
+                onClick={() =>
+                  setIndex((index + 1) % images.length)
+                }
+              >
+                ▶
+              </button>
+            </div>
+          )}
+
+          <h3 className="text-2xl font-bold mt-6 text-white">{title}</h3>
+          <p className="text-gray-300 mt-3">{description}</p>
         </div>
       </div>
 
-      {/* 🔥 FULLSCREEN */}
-      {fullscreenIndex !== null && (
+      {/* FULLSCREEN */}
+      {fullscreen && (
         <div
           className="fixed inset-0 z-[999] bg-black flex items-center justify-center"
           onClick={() => {
             document.body.classList.remove("fullscreen-open");
-            setFullscreenIndex(null);
+            setFullscreen(false);
           }}
         >
           <img
-            src={images[fullscreenIndex]}
-            alt="Imagem ampliada"
+            src={images[index]}
             className="max-w-full max-h-full object-contain"
           />
-
-          {images.length > 1 && (
-            <>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setFullscreenIndex(
-                    (fullscreenIndex - 1 + images.length) % images.length
-                  );
-                }}
-                className="absolute left-6 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-purple-400"
-              >
-                ‹
-              </button>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setFullscreenIndex(
-                    (fullscreenIndex + 1) % images.length
-                  );
-                }}
-                className="absolute right-6 top-1/2 -translate-y-1/2 text-white text-4xl hover:text-purple-400"
-              >
-                ›
-              </button>
-            </>
-          )}
-
-          <button
-            onClick={() => {
-              document.body.classList.remove("fullscreen-open");
-              setFullscreenIndex(null);
-            }}
-            className="absolute top-6 right-6 text-white text-3xl hover:text-purple-400"
-          >
-            ✕
-          </button>
         </div>
       )}
     </>
