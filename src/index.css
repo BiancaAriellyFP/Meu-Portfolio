@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Pequenas customizações */
+html, body, #root { height: 100%; }
+body {
+  @apply bg-black text-white;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* NAVBAR */
+.navbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a40;
+  padding: 0.5rem;
+  border-radius: 18px;
+  z-index: 1000;
+
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.navbar ul {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar a {
+  display: block;
+  padding: 0.6rem 1.4rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.navbar a:hover {
+  background: #2a2a60;
+}
+
+/* animação scroll */
+.navbar-show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.navbar-hide {
+  opacity: 0;
+  transform: translate(-50%, -120%);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+
+body.fullscreen-open .navbar {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+/* 🌌 Stars background - GLOBAL */
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.7;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  animation: star-move linear infinite;
+}
+
+@keyframes star-move {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(80px, -160px);
+    opacity: 0;
+  }
+}
